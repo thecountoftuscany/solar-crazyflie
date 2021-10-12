@@ -100,6 +100,7 @@ For more details refer to the paper (note as of 11 Oct 2021: not yet available o
 - [[https://homes.cs.washington.edu/~vsiyer/][Vikram Iyer]]
 - [[https://faculty.washington.edu/minster/][Sawyer B. Fuller]]
 * Acknowledgements
+The authors would like to thank [[https://yogeshchukewad.com/][Yogesh Chukewad]] for insightful suggestions during the writing of the paper, and [[https://www.afrl.af.mil/AFOSR/][The Air Force Office of Scientific Research (AFOSR)]], grant no. FA9550-14-1-0398 by [[http://nifti.washington.edu/][The Air Force Center of Excellence on Nature-Inspired Flight Technologies and Ideas (NIFTI)]] for funding the equipment used in this research.
 
 #+begin_comment
 TODO: link to paper (from IEEE explore), video, spotlight presentation slides, detailed video presentation once uploaded to IEEE explore. Also link to bitcraze blog post.
