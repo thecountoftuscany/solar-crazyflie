@@ -1,0 +1,107 @@
+#+title: Toward battery-free flight: Duty cycled recharging of small drones (IEEE IROS 2021)
+#+author: Nishant Elkunchwar, Suvesha Chandrasekaran, Vikram Iyer, Sawyer B. Fuller
+
+This repository contains the source code and circuit schematics used in the IEEE IROS 2021 paper titled "Toward battery-free flight: Duty cycled recharging of small drones".
+#+html: <p align="center"><img src="resources/drone.JPG" alt="The drone carrying the thin film solar panels and all other components" width="500" /></p>
+
+* Major highlights
+** A solar charging circuit
+#+html: <p align="center"><img src="resources/ckt_cropped.jpg" alt="Solar charging circuit" width="500" /></p>
+- 39 x 21 mm, 1.83 g circuit laser etched using a DPSS laser machine
+- 90.84 % average efficiency across different light intensities (see the [[Results]] section)
+- charges a 250 mAh 1S LiPo battery completely with two 94 x 73 mm (1.98 g each) thin film flexible solar panels in 3 hr 3 min (see the [[Results]] section) in real outdoor lighting varying due to intermittent clouds
+** A passive folding mounting mechanism
+https://user-images.githubusercontent.com/14308382/136243970-1dca0429-ac65-4f95-9dc4-829e8c846ea5.mp4
+- fabricated using 2.3 mm balsa wood, weighs just 0.83 g
+- enables airflow from propellers for lift, decreases destabilizing torques
+- uses gravity for folding down and ground effect (increase in air pressure below the drone near the ground) to open out the panels; passive mechanism implies no actuators, making it simple, effective and light
+** A landing site selection strategy
+https://user-images.githubusercontent.com/14308382/136245977-f141101d-2a0c-4fd0-a3ba-4daf73d85fbe.mov
+- detects presence of light to avoid landing in shaded regions
+- avoids crashing into nearby obstacles
+- avoids landing in unflat terrain where panels cannot open out for recharging
+* Description of repository contents
+- [[./circuits][circuits]]: charging circuit schematics and vector drawings used for laser etching
+- [[./data][data]]: all recorded experiment data used for generating all plots (see the [[Results]] section)
+- [[./docs][docs]]: relevant datasheets etc
+- [[./resources][resources]]: resources used in this README
+- [[./scripts][scripts]]: all scripts
+  - [[./scripts/plots][scripts/plots]]: the scripts used for generating all plots (see the [[Results]] section)
+  - [[./scripts/controller.py][scripts/controller.py]]: script used to manually control the crazyflie and trigger the landing site selection sequence. Heavily borrows from [[https://github.com/thecountoftuscany/crazyflie-run-and-tumble/blob/master/scripts/cflibController.py][thecountoftuscany/crazyflie-run-and-tumble/scripts/cflibController.py]] for the keyboard control part.
+    - While the battery is not low, the drone is controlled manually to fly around. This behaviour can be substituted with whatever persistent operations (autonomous or otherwise) are desired in a particular application.
+    - To get outside a shaded area, the drone keeps moving forward (defined as at least 1000 lux for indoor light, and 100,000 lux for outdoors). This behaviour can be changed to a random walk or anything else as desired.
+    - To avoid obstacles, the drone moves directly away from the closest one. This behaviour can be changed to turning away, wall-following, sliding mode controller or anything else as desired
+    - On detecting an unflat area, the drone moves forward by a set amount to re-check for flatness. This behaviour can be changed to a random walk or anything else as desired
+    - To check for flatness, the drone measures time of flight measurements while moving in a square around the area to be tested. This behaviour can be changed to a different trajectory (for eg. a circle) as desired.
+  - [[./scripts/crazyflie-thrust-control.py][scripts/crazyflie-thrust-control.py]]: script used to control crazyflie's thrust (open loop, constant or closed loop, hovering) and save data for flight performance plots (see the [[Results]] section)
+* Requirements
+The following python packages (obtain using =pip=, =conda=, your OS distribution package manager or any other preferred means):
+- =numpy=
+- =pygame=
+- [[https://github.com/bitcraze/crazyflie-lib-python][cflib]]
+- =argparse=
+- =matplotlib=
+* Background
+** UAV flight time limits persistent operations
+- Battery capacity limits flight time: low energy density of currently available batteries, but high power required for hovering flight
+- Miniaturization reduces required flight power and solar harvesting increases flight time
+** Why solar power?
+*** Scaling effects due to miniaturization
+#+html: <p align="center"><img src="resources/mass_vs_array_scaling2.png" alt="PV cell size required for hovering reduces faster than drone size" width="500" /></p>
+- Scaling effects lead to lower required hover power for smaller robots. This scales down faster than required photovoltaic panel size required for continuous hover (see figure).
+- For scale l:
+  + PV cell area scales as l^2
+  + Required flight power for hovering scales as l^7/2
+- From existing robots, we can see this trend that required PV cell size for continuous hovering becomes smaller than the robot size below approx 1 g robot mass. For robots slightly above this threshold duty cycled operation is possible: that is, the robot operates normally until the battery is low, at which point it stops, recharges its battery and continues operation indefinitely.
+*** Simplicity: previous solutions too complicated for small aerial robots
++ Tethered flight: restricts drone movement
++ Wireless power transfer, autonomously docking to power outlets, hot-swapping UAV batteries in-flight: needs additional base stations or docks, bulky sensors (eg. cameras, lidars) to search for and align / dock with them, computationally intensive algorithms (eg. computer vision) for planning, and additional sensors for localization. Also restricts how far the drone can travel via dependence on these external systems
++ Solar-powered hovering for fixed wing drones: only achieved on large, fixed wing drones. Large size increases cost, use of unpackaged monocrystalline solar panels makes them fragile, and being fixed wing decreases agility and they cannot hover which limits their utility for many applications
+In contrast, this system is simple, self-contained and deployable on size, weight, power and computationally limited platforms, specially, insect scale robots like the [[https://arxiv.org/pdf/2001.02320.pdf][UW Robofly]].
+** Why duty cycled?
+- Inspiration from IoT radios: low average power
+- Continuous hover with only solar power not possible at this scale. Duty cycled operation enables indefinite operation without any human intervention or existence of any external power infrastructure.
+- Traversal of long distances possible: no need for a return journey
+* System
+- 21 g palm-sized drone, Crazyflie 2.1 with optic flow deck, multiranger deck, and BH1750 light sensor (driver can be obtained [[https://github.com/thecountoftuscany/crazyflie-run-and-tumble/blob/master/crazyflie-firmware/src/deck/drivers/src/bh1750deck.c][here]])
+- Custom charging circuit
+#+html: <p align="center"><img src="resources/schematic.png" alt="Charging circuit schematic" width="500" /></p>
+- Solar panels: two thin-film flexible, amorphous silicon cells (200 microns), 94 x 73 mm
+* Results
+** Solar charging
+*** Complete battery charge
+#+html: <p align="center"><img src="resources/charging-curve.png" alt="Solar charging a LiPo battery" width="500" /></p>
+*** Charging efficiency
+#+html: <p align="center"><img src="resources/efficiency.png" alt="Efficiency of charging circuit" width="400" /></p>
+*** Charging times for different cell configurations
+|----------------+----------+---------------------------------+----------------+---------------------|
+| Panels         | Mass (g) | Avg light intensity (x10^3 lux) | Avg efficiency | Charging time (min) |
+|----------------+----------+---------------------------------+----------------+---------------------|
+| two MPT4.8-75  |     3.96 |                          107.16 |         90.84% |                 183 |
+| four MPT4.8-75 |     7.92 |                           71.41 |         89.61% |                  84 |
+| four MPT6-75   |     9.20 |                           65.74 |          86.94 |                  80 |
+|----------------+----------+---------------------------------+----------------+---------------------|
+** Folding solar panel mounts
+#+html: <p align="center"><img src="resources/solar-panels-flat.png" alt="Battery discharge curves under different loads" width="320" /> <img src="resources/solar-panels-retracted.JPG" width="320"></p>
+*** Necessity
+- to allow airflow from propellers
+- to reduce imbalancing torques
+- to enable passive transition between states
+*** Flight performance
+- 4.7 min flight time
+- can travel 400 m at maximum velocity in single discharge, or 1.2 km in a day (assuming two recharges which is typical in a day)
+#+html: <p align="center"><img src="resources/discharging-curves.png" alt="Battery discharge curves under different loads" width="320" /></p>
+** Landing site selection
+#+html: <p align="center"><img src="resources/flatness-check-colored.png" alt="Landing site selection algorithm" width="800" /></p>
+* Authors
+For more details refer to the paper (note as of 11 Oct 2021: not yet available on IEEE explore). You can also contact one of the authors below:
+- [[https://www.linkedin.com/in/nishant-elkunchwar][Nishant Elkunchwar]]
+- [[https://www.linkedin.com/in/suvesha-c][Suvesha Chandrasekaran]]
+- [[https://homes.cs.washington.edu/~vsiyer/][Vikram Iyer]]
+- [[https://faculty.washington.edu/minster/][Sawyer B. Fuller]]
+* Acknowledgements
+
+#+begin_comment
+TODO: link to paper (from IEEE explore), video, spotlight presentation slides, detailed video presentation once uploaded to IEEE explore. Also link to bitcraze blog post.
+TODO: author links
+#+end_comment
