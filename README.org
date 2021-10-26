@@ -102,6 +102,9 @@ For more details refer to the paper (note as of 11 Oct 2021: not yet available o
 * Acknowledgements
 The authors would like to thank [[https://yogeshchukewad.com/][Yogesh Chukewad]] for insightful suggestions during the writing of the paper, and [[https://www.afrl.af.mil/AFOSR/][The Air Force Office of Scientific Research (AFOSR)]], grant no. FA9550-14-1-0398 by [[http://nifti.washington.edu/][The Air Force Center of Excellence on Nature-Inspired Flight Technologies and Ideas (NIFTI)]] for funding the equipment used in this research.
 
+* Todos
+- [ ] The crazyflie now has an [[https://www.bitcraze.io/documentation/repository/crazyflie-firmware/2020.02/app_layer/][app layer]]. Implement this algorithm on-board and remove the dependency on an external computer
+
 #+begin_comment
 TODO: link to paper (from IEEE explore), video, spotlight presentation slides, detailed video presentation once uploaded to IEEE explore. Also link to bitcraze blog post.
 TODO: author links
