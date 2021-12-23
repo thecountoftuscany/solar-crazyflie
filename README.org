@@ -1,7 +1,7 @@
 #+title: Toward battery-free flight: Duty cycled recharging of small drones (IEEE IROS 2021)
 #+author: Nishant Elkunchwar, Suvesha Chandrasekaran, Vikram Iyer, Sawyer B. Fuller
 
-This repository contains the source code and circuit schematics used in the IEEE IROS 2021 paper titled "Toward battery-free flight: Duty cycled recharging of small drones".
+This repository contains the source code and circuit schematics used in the IEEE IROS 2021 paper titled [[https://ieeexplore.ieee.org/document/9636087][Toward battery-free flight: Duty cycled recharging of small drones]].
 #+html: <p align="center"><img src="resources/drone.JPG" alt="The drone carrying the thin film solar panels and all other components" width="500" /></p>
 
 * Major highlights
@@ -94,8 +94,8 @@ In contrast, this system is simple, self-contained and deployable on size, weigh
 ** Landing site selection
 #+html: <p align="center"><img src="resources/flatness-check-colored.png" alt="Landing site selection algorithm" width="800" /></p>
 * Authors
-For more details refer to the paper (note as of 11 Oct 2021: not yet available on IEEE explore). You can also contact one of the authors below:
-- [[https://www.linkedin.com/in/nishant-elkunchwar][Nishant Elkunchwar]]
+For more details refer to the paper [[https://ieeexplore.ieee.org/document/9636087][here]]. You can also contact one of the authors below:
+- [[https://students.washington.edu/nishante][Nishant Elkunchwar]]
 - [[https://www.linkedin.com/in/suvesha-c][Suvesha Chandrasekaran]]
 - [[https://homes.cs.washington.edu/~vsiyer/][Vikram Iyer]]
 - [[https://faculty.washington.edu/minster/][Sawyer B. Fuller]]
@@ -104,8 +104,3 @@ The authors would like to thank [[https://yogeshchukewad.com/][Yogesh Chukewad]]
 
 * Todos
 - [ ] The crazyflie now has an [[https://www.bitcraze.io/documentation/repository/crazyflie-firmware/2020.02/app_layer/][app layer]]. Implement this algorithm on-board and remove the dependency on an external computer
-
-#+begin_comment
-TODO: link to paper (from IEEE explore), video, spotlight presentation slides, detailed video presentation once uploaded to IEEE explore. Also link to bitcraze blog post.
-TODO: author links
-#+end_comment
